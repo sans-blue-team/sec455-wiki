@@ -42,11 +42,11 @@ Then uncomment the cron job for either the 9 AM automatic update or the update a
 ```bash
 # Uncomment the below entry to automatically update the SEC455
 # wiki. The default check occurs at 9 AM but can be changed.
-#0 9 * * * powershell -file /home/student/wiki_update.ps1
+#0 9 * * * pwsh -file /scripts/wiki_update.ps1
 
 # Uncomment the below entry to automatically update the SEC455
 # wiki after each reboot.
-#@reboot powershell -file /home/student/wiki_update.ps1
+#@reboot pwsh -file /scripts/wiki_update.ps1
 ```
 
 When finished the cron entry should look similar to this:
@@ -54,11 +54,11 @@ When finished the cron entry should look similar to this:
 ```bash
 # Uncomment the below entry to automatically update the SEC455
 # wiki. The default check occurs at 9 AM but can be changed.
-0 9 * * * powershell -file /home/student/wiki_update.ps1
+0 9 * * * pwsh -file /scripts/wiki_update.ps1
 
 # Uncomment the below entry to automatically update the SEC455
 # wiki after each reboot.
-@reboot powershell -file /home/student/wiki_update.ps1
+@reboot pwsh -file /scripts/wiki_update.ps1
 ```
 
 ---
