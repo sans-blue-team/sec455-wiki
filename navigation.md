@@ -36,11 +36,11 @@ SEC455
 
 -	#### Authors
 -	[Justin Henderson](/Instructors/JustinHenderson.md)
+-   [John Hubbard](/Instructors/JohnHubbard.md)
 -	#### Instructors
 -	[Seth Misenar](/Instructors/SethMisenar.md)
 -	[Eric Conrad](/Instructors/EricConrad.md)
 -	[Tim Garcia](/Instructors/TimGarcia.md)
--	[John Hubbard](/Instructors/JohnHubbard.md)
 -   [David Mashburn](/Instructors/DavidMashburn.md)
 
 [Updates]()
