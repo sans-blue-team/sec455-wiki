@@ -1,4 +1,4 @@
-Justin Henderson, GSE #108
+John Hubbard
 ============
 
 Contact
