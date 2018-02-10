@@ -97,13 +97,14 @@ URL Repositories are read-only sources for restoring data. They support the foll
 repositories.url.allowed_urls: ["http://www.example.org/root/*", "https://*.mydomain.com/*?*#*"]
 ```
 
-Networking:
+Networking
 ---------
 By default, Elasticsearch will only listen on the local loopback interface (127.0.0.1), when you go to form a cluster in production, you will need to modify these settings so nodes can talk to each other over the network. This involves 2 steps, setting the **network.host** variable to tell Elasticsearch to listen on other network interfaces, and setting the discovery.zen.ping.unicast.hosts variable to point to the other nodes in the cluster.
 
 **network.host:**
 The following special values may be set for **network.host** in the elasticsearch.yml file, and multiple can be used at once separated by a comma:
 
+```bash
 _local_ - Any loopback addresses on the system, for example 127.0.0.1 (this is the default).
 
 _site_ - Any site-local addresses on the system, for example 192.168.0.1.
@@ -111,6 +112,7 @@ _site_ - Any site-local addresses on the system, for example 192.168.0.1.
 _global_ - Any globally-scoped addresses on the system, for example 8.8.8.8. 
 
 _[networkInterface]_ - Addresses of a network interface, for example _en0_. 
+```
 
 Example:
 ```bash
