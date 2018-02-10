@@ -58,3 +58,137 @@ If you need to go even deeper on debugging, you can turn up log4j2 settings to "
 ```bash
 logger.org.elasticsearch.transport: trace
 ```
+
+Shard Allocation Investigation
+---------
+At some point in time, you may find yourself wondering why shards are not being allocated in the way you expect. To answer this question, Elasticsearch provides the cluster level Explain API - https://www.elastic.co/guide/en/elasticsearch/reference/current/cluster-allocation-explain.html. Issuing the following command via the Dev Tools interface or Cerebro will provide an explanation why allocation is in the state it is in.
+
+```bash
+GET /_cluster/allocation/explain
+```
+
+elasticsearch.yml Setup Options
+---------
+For detailed reference on the options below in the /etc/elasticsearch/elasticsearch.yml file, consult the Elasticsearch Modules section of the help documents: https://www.elastic.co/guide/en/elasticsearch/reference/current/modules.html
+
+Once any options in this section are changed, the elasticsearch serivce will need to be restarted for the changes to take effect
+
+```bash
+sudo service elasticsearch restart
+```
+
+Snapshot and Restore
+---------
+Assuming that the shared filesystem is mounted to /mount/backups/my_backup, the following setting should be added to elasticsearch.yml file:
+
+```bash
+path.repo: ["/mount/backups", "/mount/longterm_backups"]
+```
+
+The path.repo setting supports Microsoft Windows UNC paths as long as at least server name and share are specified as a prefix and back slashes are properly escaped:
+
+```bash
+path.repo: ["\\\\MY_SERVER\\Snapshots"]
+```
+
+URL Repositories are read-only sources for restoring data. They support the following protocols: "http", "https", "ftp", "file" and "jar". URL repositories with http:, https:, and ftp: URLs have to be whitelisted by specifying allowed URLs in the **repositories.url.allowed_urls** setting. This setting supports wildcards in the place of host, path, query, and fragment. For example:
+
+```bash
+repositories.url.allowed_urls: ["http://www.example.org/root/*", "https://*.mydomain.com/*?*#*"]
+```
+
+Networking:
+---------
+By default, Elasticsearch will only listen on the local loopback interface (127.0.0.1), when you go to form a cluster in production, you will need to modify these settings so nodes can talk to each other over the network. This involves 2 steps, setting the **network.host** variable to tell Elasticsearch to listen on other network interfaces, and setting the discovery.zen.ping.unicast.hosts variable to point to the other nodes in the cluster.
+
+**network.host:**
+The following special values may be set for **network.host** in the elasticsearch.yml file, and multiple can be used at once separated by a comma:
+
+_local_ - Any loopback addresses on the system, for example 127.0.0.1 (this is the default).
+
+_site_ - Any site-local addresses on the system, for example 192.168.0.1.
+
+_global_ - Any globally-scoped addresses on the system, for example 8.8.8.8. 
+
+_[networkInterface]_ - Addresses of a network interface, for example _en0_. 
+
+Example:
+```bash
+network.host: _site_,_local_
+```
+
+**discovery.zen.ping.unicast.hosts:**
+In order to join a cluster, a node needs to know the hostname or IP address of at least some of the other nodes in the cluster. This setting provides the initial list of other nodes that this node will try to contact. Accepts IP addresses or hostnames. If a hostname lookup resolves to multiple IP addresses then each IP address will be used for discovery.
+
+Example:
+```bash
+discovery.zen.ping.unicast.hosts: ["10.0.0.2", "10.0.0.3", "10.0.0.4"]
+```
+
+Remember. it is **very important** to set the minimum master nodes that must be visibile to avoid split brain. The formula for the correct amount is (master-eligible nodes/2) + 1. FOr a 3 node cluster, use 2, for a 10 node cluster, use 6, etc.
+
+Example:
+```bash
+discovery.zen.minimum_master_nodes: 2
+```
+
+For discovery using clusters in ECS, Azure, and Google Computer Engine, refer to the following URL: https://www.elastic.co/guide/en/elasticsearch/reference/current/modules-discovery.html 
+
+Node Type Setup
+---------
+In order to designate whether your node can act as a master, data, ingest, or coordinating node, the options below must be specified in the **elasticsearch.yml** file. Note that if X-Pack is installed, there is an extra node type available for machine learning and the settings from the X-Pack section below should be used.
+
+If X-Pack is **not** installed, use this configuration to create a dedicated **master-eligible** node:
+
+```bash
+node.master: true 
+node.data: false 
+node.ingest: false 
+search.remote.connect: false
+```
+
+For a dedicated **data** node **without** X-Pack installed:
+```bash
+node.master: false 
+node.data: true 
+node.ingest: false 
+search.remote.connect: false
+```
+
+For a **coordinating** node **without** X-Pack installed: 
+
+```bash
+node.master: false 
+node.data: false 
+node.ingest: false 
+search.remote.connect: false
+```
+
+If X-Pack **is** installed with machine learning, use this configuration to create a dedicated **master-eligible** node:
+
+```bash
+node.master: true 
+node.data: false 
+node.ingest: false 
+node.ml: false 
+xpack.ml.enabled: true
+```
+
+For a dedicated **data** node **with** X-Pack installed: 
+
+```bash
+node.master: false 
+node.data: true 
+node.ingest: false 
+node.ml: false 
+```
+
+For a **coordinating** node **with** X-Pack installed: 
+
+```bash
+node.master: false 
+node.data: false 
+node.ingest: false 
+search.remote.connect: false 
+node.ml: false
+```
