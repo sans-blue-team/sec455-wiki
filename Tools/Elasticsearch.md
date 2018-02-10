@@ -225,7 +225,13 @@ To run a "race", you must first configure esrally, then run the esrally command 
 
 ```bash
 $ esrally configure
-$ esrally --distribution-version=5.0.0
+$ esrally --distribution-version=6.0.0
+```
+
+Note that Rally has different benchmarks for different use cases called "tracks". Of the defaults, the "http_logs" track is likely the most applicable for a SIEM use case. To run this track, use the command line argument below.
+
+```bash
+$ esrally --distribution-version=6.0.0 --track=http_logs
 ```
 
 For detailed instructions on customizing the test, consult the esrally documentation at https://esrally.readthedocs.io/en/latest/index.html.
