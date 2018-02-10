@@ -238,9 +238,21 @@ For detailed instructions on customizing the test, consult the esrally documenta
 
 Text Analysis and Tokenization
 ---------
-If you would like to experiment with different types of text analysis, the Elasticsearch Analyze API can be used to see how your input text will be separated into tokens. For an example, paste the entire section below into the Kibana Dev Tools window and analyze the tokens that are output as each different request is submitted. Note that the tokenizer is what initially breaks up the strings into tokens, and the token filters then modify the broken up tokens further (for example reversing them in some cases below). 
+If you would like to experiment with different types of text analysis, the Elasticsearch Analyze API can be used to see how your input text will be separated into tokens. For an example, paste the entire section below into the Kibana Dev Tools window and analyze the tokens that are output as each different request is submitted. Note that an analyzer is defined as a pre-defined set of character filters, token filters, and a tokenizer. The tokenizer is what breaks up the strings into tokens, and the token filters then modify the broken up tokens further (for example reversing them in some cases below). 
 
 ```bash
+GET _analyze
+{
+  "analyzer" : "standard",
+  "text" : "MiXed-CaSE WritinG with SPeciaL-!@@=RANDOM}{-ChARACTERS"
+}
+
+GET _analyze
+{
+  "tokenizer" : "standard",
+  "text" : "MiXed-CaSE WritinG with SPeciaL-!@@=RANDOM}{-ChARACTERS"
+}
+
 GET _analyze
 {
   "tokenizer" : "standard",
