@@ -203,13 +203,13 @@ To install Curator, run the below command. Note that if pip is not installed, yo
 $ pip install elasticsearch-curator
 ```
 
-Reference for the Curator configuration file (curator.yml) can be found at the url below, this configuration must be set up before Curator can be successfully run.
-https://www.elastic.co/guide/en/elasticsearch/client/curator/current/configfile.html 
+Reference for the Curator configuration file (curator.yml) can be found at the url below, this configuration must be set up before Curator can be successfully run. https://www.elastic.co/guide/en/elasticsearch/client/curator/current/configfile.html 
 
 Multiple examples for curator scripts can be found on the curator site at the following url: https://www.elastic.co/guide/en/elasticsearch/client/curator/current/examples.html. 
 
 Be aware that these scripts come disabled due to the "disable_action: True" line. Remove this line when testing (even dry runs) or no results will be shown. 
-It is highly advised that you try these out using the "--dry-run:" parameter before running them.
+
+It is **highly advised** that you try these out using the "--dry-run:" parameter before running them.
 
 Benchmarking Elasticsearch
 ---------
