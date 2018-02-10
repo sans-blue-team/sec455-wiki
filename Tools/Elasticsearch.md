@@ -23,13 +23,13 @@ If you have a node that either won't start up, or is failing after a period of t
 To tail the elasticsearch service logs written to the systemd journal, use the command below. It can be helpful to leave this command running in a terminal window while trying to diagnose the problem.
 
 ```bash
-sudo journalctl -u elasticsearch.service -f
+$ sudo journalctl -u elasticsearch.service -f
 ```
 
 To view the entire systemd journal for all services, which may help in case the issue is being caused with another service, this command can be used.
 
 ```bash
-sudo journalctl -xe
+$ sudo journalctl -xe
 ```
 
 Often times, if the node is not able to start, the reasons will not be present in the systemd journal. In this case you should check the main elasticsearch log files, written by default to /var/log/elasticsearch/[clustername].log. This folder contains multiple logs files: the normal cluster log (sec455.log), the deprecation log (sec455_deprecation.log), and the slowlog (sec455_index_search_slowlog.log). FOr troublshooting, you are interested in the log that matches the cluster name, in the case of the VM, sec455.log.
@@ -42,15 +42,15 @@ sec455-2018-01-15-1.log.gz  sec455-2018-01-16-1.log.gz  sec455_deprecation.log  
 In the case of the class VM, the following command will show the elasticsearch log file, as well as use tail to continuously monitor it. Be aware that by default, **you will need to use root access** to read the elasticsearch log files. It can be helpful to leave this command running in a terminal window while issuing the "sudo service elasticsearch restart" command to find what errors are generated when the node is started. Be aware that logs can be very verbose so you may want to filter for lines that contain WARN or FATAL and ignore INFO line.
 
 ```bash
-sudo cat /var/log/elasticsearch/sec455.log
-sudo tail -f /var/log/elasticsearch/sec455.log
+$ sudo cat /var/log/elasticsearch/sec455.log
+$ sudo tail -f /var/log/elasticsearch/sec455.log
 ```
 
 Logs from previous days are gzipped to save space. These can still be viewed without uncompressing them by using the "zcat" command such as in the example below. It may be helpful to filter out the lines that contain INFO using the output pipped to a grep command eliminating lines that contain the "INFO" tag, however be aware that since the log entries can span multiple lines, this may not perfectly filter it out.
 
 ```bash
-sudo zcat /var/log/elasticsearch/sec455-2018-01-15-1.log.gz
-sudo zcat /var/log/elasticsearch/sec455-2018-01-15-1.log.gz | grep -v INFO
+$ sudo zcat /var/log/elasticsearch/sec455-2018-01-15-1.log.gz
+$ sudo zcat /var/log/elasticsearch/sec455-2018-01-15-1.log.gz | grep -v INFO
 ```
 
 If you need to go even deeper on debugging, you can turn up log4j2 settings to "trace" level by inserting the following line into the elasticsearch.yml file and restarting the elasticsearch process. Be sure to turn this back off after it is no longer needed, since it will cause log files to be extremely verbose.
@@ -127,7 +127,7 @@ Example:
 discovery.zen.ping.unicast.hosts: ["10.0.0.2", "10.0.0.3", "10.0.0.4"]
 ```
 
-Remember. it is **very important** to set the minimum master nodes that must be visibile to avoid split brain. The formula for the correct amount is (master-eligible nodes/2) + 1. FOr a 3 node cluster, use 2, for a 10 node cluster, use 6, etc.
+Remember, it is **very important** to set the minimum master nodes that must be visibile to avoid split brain. The formula for the correct amount is (master-eligible nodes/2) + 1. FOr a 3 node cluster, use 2, for a 10 node cluster, use 6, etc.
 
 Example:
 ```bash
@@ -194,3 +194,38 @@ node.ingest: false
 search.remote.connect: false 
 node.ml: false
 ```
+
+Curator Examples
+---------
+To install Curator, run the below command. Note that if pip is not installed, you may need to install that first with "sudo apt install python-pip" or your distributions package manager equivalent.
+
+```bash
+$ pip install elasticsearch-curator
+```
+
+Reference for the Curator configuration file (curator.yml) can be found at the url below, this configuration must be set up before Curator can be successfully run.
+https://www.elastic.co/guide/en/elasticsearch/client/curator/current/configfile.html 
+
+Multiple examples for curator scripts can be found on the curator site at the following url: https://www.elastic.co/guide/en/elasticsearch/client/curator/current/examples.html. 
+
+Be aware that these scripts come disabled due to the "disable_action: True" line. Remove this line when testing (even dry runs) or no results will be shown. 
+It is highly advised that you try these out using the "--dry-run:" parameter before running them.
+
+Benchmarking Elasticsearch
+---------
+Elastic has developed a benchmarking suite called "Rally" for testing your hardware for Elasticsearch performance. https://github.com/elastic/rally Note it is **NOT** designed to test a pre-exisiting, cluster. It CAN be done that way, but the preferred method is to issue the command to benchmark, and let the Rally package set up its own benchmarking cluster for testing. This will yield the most detailed and accurate results. This means you should run this suite on your hardware **before** you install Elasticsearch on it for production.
+
+To install Rally, note you may need to install pip for Python 3 first with "sudo apt install python3-pip" or your distributions package manager equivalent.
+
+```bash
+$ pip3 install esrally
+```
+
+To run a "race", you must first configure esrally, then run the esrally command with a argument for the version of elasticsearch you would like to test. This will fully install the elasticsearch packages and everything involved.
+
+```bash
+$ esrally configure
+$ esrally --distribution-version=5.0.0
+```
+
+For detailed instructions on customizing the test, consult the esrally documentation at https://esrally.readthedocs.io/en/latest/index.html.
