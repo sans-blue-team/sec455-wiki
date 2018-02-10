@@ -235,3 +235,42 @@ $ esrally --distribution-version=6.0.0 --track=http_logs
 ```
 
 For detailed instructions on customizing the test, consult the esrally documentation at https://esrally.readthedocs.io/en/latest/index.html.
+
+Text Analysis and Tokenization
+---------
+If you would like to experiment with different types of text analysis, the Elasticsearch Analyze API can be used to see how your input text will be separated into tokens. For an example, paste the entire section below into the Kibana Dev Tools window and analyze the tokens that are output as each different request is submitted. Note that the tokenizer is what initially breaks up the strings into tokens, and the token filters then modify the broken up tokens further (for example reversing them in some cases below). 
+
+```bash
+GET _analyze
+{
+  "tokenizer" : "standard",
+  "text" : "http://www.google.com/search/file.jpg, https://wiki.sans-training.local, instructor@sans.org"
+}
+
+GET _analyze
+{
+  "tokenizer" : "uax_url_email",
+  "explain" : "true",
+  "text" : "http://www.google.com/search/pic.jpg, https://wiki.sans-training.local, instructor@sans.org"
+}
+
+GET _analyze
+{
+  "tokenizer" : "standard",
+  "filter" : ["reverse"],
+  "text" : "http://www.google.com/search/pic.jpg, https://wiki.sans-training.local, instructor@sans.org"
+}
+
+GET _analyze
+{
+  "tokenizer" : "uax_url_email",
+  "filter" : ["reverse"],
+  "text" : "http://www.google.com/search/pic.jpg, https://wiki.sans-training.local, instructor@sans.org"
+}
+```
+
+To see a list of tokenizers and token filter options see the following URLs:
+
+Anatomy of an Analyzer: https://www.elastic.co/guide/en/elasticsearch/reference/current/analyzer-anatomy.html 
+Tokenizers: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenizers.html
+Token Filters: https://www.elastic.co/guide/en/elasticsearch/reference/current/analysis-tokenfilters.html
