@@ -9,17 +9,12 @@ Contact
 
 **LinkedIn** | [justinhenderson2014](https://www.linkedin.com/in/justinhenderson2014)
 
-**Google+** | []()
-
 **Blog** | [Blogs on H & A website](https://www.hasecuritysolutions.com/blog)
 
-**YouTube** | []()
-
-**Prezi** | []()
 
 Affiliations
 -------
-[SANS Institute](http://www.sans.org) | **Senior SANS Instructor**
+[SANS Institute](http://www.sans.org) | **SANS Instructor**
 [H & A Security Solutions LLC](https://www.hasecuritysolutions.com) | **CEO**
 
 Bio
