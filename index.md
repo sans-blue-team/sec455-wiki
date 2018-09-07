@@ -121,8 +121,8 @@ Alumni Mailing List
 
 ---
 
-Join the 455 alumni mailing list:
+Join the 455 alumni Slack channel:
 
-[http://SEC455.com/455group](http://SEC455.com/455group)
+[https://sec455.com/slack.php](https://sec455.com/slack.php)
 
 ---
