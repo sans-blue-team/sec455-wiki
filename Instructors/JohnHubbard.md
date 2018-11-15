@@ -11,7 +11,7 @@ Contact
 
 Affiliations
 -------
-[SANS Institute](http://www.sans.org) | **SANS Instructor**
+[SANS Institute](http://www.sans.org) | **Certified SANS Instructor**
 [ThreatLogic LLC](https://www.threat-logic.com) | **Co-Founder**
 
 Bio
